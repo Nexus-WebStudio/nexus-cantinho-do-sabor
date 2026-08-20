@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cantinho do Sabor | Lanchonete</title>
+    
+    <!-- Google Fonts: Lilita One (Títulos saborosos) e Nunito (Textos) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuração do Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        tasty: ['Lilita One', 'cursive'],
+                    },
+                    colors: {
+                        brand: {
+                            red: '#e31837',      
+                            redHover: '#c2102b',
+                            yellow: '#ffc300',   
+                            dark: '#1a1a1a',     
+                            card: '#242424',     
+                            text: '#f8f9fa',     
+                            muted: '#a1a1aa'     
+                        }
+                    },
+                    backgroundImage: {
+                        'wood-pattern': "linear-gradient(rgba(26, 26, 26, 0.93), rgba(26, 26, 26, 0.93)), url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Bloqueia a seleção de texto e o "cursor piscando" em tudo que não for input */
+        body { 
+            background-color: #1a1a1a; 
+            color: #f8f9fa; 
+            -webkit-tap-highlight-color: transparent; 
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        input, textarea {
+            user-select: auto;
+            -webkit-user-select: auto;
+        }
+        
+        /* Oculta barra de rolagem mas mantém a função */
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Faixa Quadriculada Retrô do Topo */
+        .diner-border {
+            height: 8px;
+            background-image: repeating-linear-gradient(45deg, #e31837 0, #e31837 10px, #ffffff 10px, #ffffff 20px);
+            width: 100%;
+        }
+
+        /* Animações Mágicas */
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        .slide-up { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .bounce-in { animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes bounceIn { 0% { transform: scale(0); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        
+        /* Efeito de botão gostoso */
+        .btn-press:active { transform: scale(0.95); transition: transform 0.1s; }
+
+        /* Estilo pontilhado retrô */
+        .retro-divider {
+            border-bottom: 3px dotted #52525b;
+            margin: 15px 0;
+            opacity: 0.5;
+        }
+
+        /* Detalhe rasgado no card */
+        .card-tasty {
+            border-left: 4px solid #e31837;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="bg-wood-pattern bg-fixed bg-cover bg-center pb-28 min-h-screen flex flex-col" contenteditable="false">
+
+    <!-- ========================================== -->
+    <!-- CABEÇALHO RETRÔ / VINTAGE                  -->
+    <!-- ========================================== -->
+    <div class="diner-border sticky top-0 z-50"></div>
+    <header class="bg-brand-dark/95 backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.5)] border-b border-white/10 sticky top-[8px] z-40">
+        
+        <div class="container mx-auto px-4 py-4">
+            <!-- Logo e Nome -->
+            <div class="flex items-center gap-4 mb-4 cursor-default">
+                <!-- Logo -->
+                <div class="w-20 h-20 rounded-full bg-brand-yellow flex flex-col items-center justify-center border-4 border-brand-red shrink-0 shadow-[0_0_15px_rgba(227,24,55,0.4)] bounce-in">
+                    <i class="fa-solid fa-burger text-brand-red text-3xl drop-shadow-md mb-0.5"></i>
+                    <p class="text-[8px] font-tasty text-brand-red uppercase tracking-widest leading-none text-center">Cantinho</p>
+                    <p class="text-[7px] font-black text-brand-dark uppercase tracking-tight leading-none text-center mt-0.5">do Sabor</p>
+                </div>
+
+                <div class="flex-1">
+                    <h1 class="text-2xl font-tasty text-brand-yellow uppercase tracking-wide drop-shadow-lg leading-none mb-1.5" id="header-nome">Cantinho do Sabor</h1>
+                    
+                    <!-- BOTÃO INSTAGRAM OFICIAL -->
+                    <a href="https://instagram.com/lanchonetecantinhodosabor_" target="_blank" class="inline-flex items-center gap-1.5 bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] text-white px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider shadow-md hover:scale-105 transition-transform mb-2 btn-press cursor-pointer">
+                        <i class="fa-brands fa-instagram text-sm"></i> Seguir Instagram
+                    </a>
+
+                    <div class="space-y-1">
+                        <p class="text-xs text-gray-300 font-semibold flex items-center gap-1.5">
+                            <i class="fa-solid fa-location-dot text-brand-red"></i> 
+                            <span>Rua Tamburi, Sucupira - TO</span>
+                        </p>
+                        <p class="text-xs text-gray-400 flex items-center gap-1.5 font-semibold">
+                            <i class="fa-solid fa-motorcycle text-brand-red"></i>
+                            <span class="text-red-400">Apenas Retirada (Sem Entrega)</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Badges de Funcionamento -->
+            <div class="flex flex-wrap gap-2 mb-2 cursor-default">
+                <span class="bg-green-600 text-white px-2 py-1 rounded text-[10px] font-bold border border-green-500 uppercase shadow flex items-center gap-1" id="header-status">
+                    <i class="fa-solid fa-door-open"></i> Aberto
+                </span>
+                <span class="bg-brand-card text-gray-300 px-2 py-1 rounded text-[10px] font-bold border border-gray-700 uppercase shadow flex items-center gap-1">
+                    <i class="fa-brands fa-pix text-teal-400"></i> Aceita Pix
+                </span>
+                <span class="bg-brand-card text-gray-300 px-2 py-1 rounded text-[10px] font-bold border border-gray-700 uppercase shadow flex items-center gap-1">
+                    <i class="fa-regular fa-clock text-brand-yellow"></i> 19h às 22:30h (Fecha Quinta)
+                </span>
+            </div>
+        </div>
+
+        <!-- Navegação de Categorias -->
+        <nav class="bg-black/40 border-t border-white/5 relative">
+            <div class="container mx-auto px-2">
+                <ul class="flex overflow-x-auto hide-scroll py-3 gap-2" id="nav-categorias">
+                    <!-- Categorias JS -->
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- ÁREA DE PRODUTOS (CARDÁPIO)                -->
+    <!-- ========================================== -->
+    <main class="container mx-auto px-4 py-4 flex-1" id="produtos-container">
+        <!-- Produtos JS -->
+    </main>
+
+    <!-- ========================================== -->
+    <!-- BOTÃO FLUTUANTE DE PEDIDO                  -->
+    <!-- ========================================== -->
+    <button id="btn-carrinho" onclick="abrirCarrinho()" class="fixed bottom-6 left-4 right-4 bg-brand-yellow hover:bg-[#ffaa00] text-brand-dark p-4 rounded-2xl shadow-[0_10px_30px_rgba(255,195,0,0.5)] flex justify-between items-center transition-all duration-300 transform translate-y-40 z-40 btn-press border-2 border-brand-red cursor-pointer">
+        <div class="flex items-center gap-3">
+            <div class="bg-brand-red text-white w-10 h-10 rounded-full flex items-center justify-center text-lg font-black shadow-inner" id="carrinho-qtd">0</div>
+            <span class="font-tasty text-xl uppercase tracking-wide">Meu Pedido</span>
+        </div>
+        <span class="font-black text-xl bg-brand-dark text-brand-yellow px-3 py-1 rounded-lg shadow-sm" id="carrinho-total-flutuante">R$ 0,00</span>
+    </button>
+
+    <!-- ========================================== -->
+    <!-- MODAL DE PRODUTO (Personalização)          -->
+    <!-- ========================================== -->
+    <div id="modal-produto" class="fixed inset-0 bg-black/80 z-50 hidden flex-col justify-end fade-in backdrop-blur-sm cursor-default">
+        <div class="bg-brand-dark w-full h-[88vh] rounded-t-[30px] flex flex-col slide-up relative border-t-4 border-brand-red shadow-[0_-10px_40px_rgba(227,24,55,0.3)]">
+            
+            <button onclick="fecharModalProduto()" class="absolute top-4 right-4 w-10 h-10 bg-black/60 backdrop-blur-md rounded-full flex items-center justify-center text-white z-10 btn-press border border-white/10 hover:bg-brand-red transition-colors cursor-pointer shadow-lg">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="h-64 w-full bg-black rounded-t-[26px] overflow-hidden shrink-0 relative">
+                <img id="modal-produto-img" src="" alt="" class="w-full h-full object-cover opacity-90">
+                <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-brand-dark to-transparent"></div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto px-6 pb-24 hide-scroll relative -mt-8">
+                <div class="bg-brand-card p-5 rounded-2xl border border-white/10 shadow-lg relative card-tasty mb-6 cursor-default">
+                    <h2 id="modal-produto-nome" class="text-2xl font-tasty text-brand-yellow uppercase tracking-wide mb-2">Nome</h2>
+                    <p id="modal-produto-desc" class="text-gray-300 text-sm font-semibold leading-relaxed mb-4">Descrição</p>
+                    <div class="inline-block bg-brand-red text-white font-black text-xl px-4 py-1.5 rounded-lg shadow-md font-tasty tracking-widest" id="modal-produto-preco">R$ 0,00</div>
+                </div>
+
+                <div id="area-adicionais" class="hidden mb-6 cursor-default">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-star text-brand-yellow text-sm"></i>
+                        <h3 class="font-tasty text-white text-xl uppercase tracking-wide">Turbine seu Lanche</h3>
+                        <span class="text-[10px] uppercase font-bold bg-gray-700 text-gray-300 px-2 py-0.5 rounded ml-auto shadow-inner">Opcional</span>
+                    </div>
+                    <div id="lista-adicionais" class="space-y-3"></div>
+                </div>
+
+                <div class="retro-divider"></div>
+
+                <div class="mb-4">
+                    <h3 class="font-tasty text-white text-xl uppercase tracking-wide mb-3 cursor-default"><i class="fa-regular fa-comment-dots text-brand-yellow mr-2"></i>Observações</h3>
+                    <textarea id="modal-produto-obs" rows="2" placeholder="Ex: Sem cebola, maionese à parte..." class="w-full bg-brand-card border border-white/10 rounded-xl p-4 text-sm text-white font-semibold placeholder-gray-500 focus:outline-none focus:border-brand-yellow transition-colors resize-none shadow-inner cursor-text"></textarea>
+                </div>
+            </div>
+
+            <div class="bg-brand-card p-4 border-t border-white/10 flex items-center gap-4 shrink-0 rounded-t-3xl shadow-[0_-5px_20px_rgba(0,0,0,0.3)] cursor-default">
+                <div class="flex items-center bg-brand-dark rounded-xl h-14 border border-white/10 px-2 shadow-inner">
+                    <button onclick="alterarQtdModal(-1)" class="w-10 h-full flex items-center justify-center text-brand-yellow text-xl btn-press cursor-pointer"><i class="fa-solid fa-minus"></i></button>
+                    <span id="modal-produto-qtd" class="w-8 text-center font-black text-white text-xl cursor-default">1</span>
+                    <button onclick="alterarQtdModal(1)" class="w-10 h-full flex items-center justify-center text-brand-yellow text-xl btn-press cursor-pointer"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                
+                <button onclick="confirmarAdicaoCarrinho()" class="flex-1 bg-brand-red hover:bg-brand-redHover text-white h-14 rounded-xl font-black flex justify-between items-center px-5 transition-colors btn-press shadow-[0_4px_15px_rgba(227,24,55,0.4)] cursor-pointer">
+                    <span class="font-tasty tracking-widest text-lg uppercase">Adicionar</span>
+                    <span id="modal-produto-total-btn" class="text-xl">R$ 0,00</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL DE CHECKOUT / CARRINHO               -->
+    <!-- ========================================== -->
+    <div id="modal-carrinho" class="fixed inset-0 bg-black/80 z-50 hidden flex-col justify-end fade-in backdrop-blur-sm cursor-default">
+        <div class="bg-brand-dark w-full h-[92vh] rounded-t-[30px] flex flex-col slide-up relative border-t-4 border-brand-yellow shadow-[0_-10px_40px_rgba(255,195,0,0.2)]">
+            
+            <div class="p-5 border-b border-white/10 flex justify-between items-center shrink-0 bg-brand-card rounded-t-[26px]">
+                <h2 class="text-2xl font-tasty text-brand-yellow uppercase tracking-widest flex items-center gap-2 cursor-default">
+                    <i class="fa-solid fa-basket-shopping text-white"></i> Seu Pedido
+                </h2>
+                <button onclick="fecharCarrinho()" class="w-10 h-10 bg-black/50 rounded-full flex items-center justify-center text-gray-400 hover:text-white btn-press transition-colors cursor-pointer shadow">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-5 hide-scroll" id="carrinho-itens">
+                <!-- Itens JS -->
+            </div>
+
+            <div class="bg-brand-card p-5 border-t border-white/10 shrink-0 shadow-[0_-10px_20px_rgba(0,0,0,0.3)]">
+                
+                <div class="mb-5 relative">
+                    <label class="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider cursor-default">Como devemos te chamar?</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-user-astronaut absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-yellow text-lg"></i>
+                        <input type="text" id="cliente-nome" placeholder="Digite seu nome..." class="w-full bg-brand-dark border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white font-bold focus:outline-none focus:border-brand-yellow focus:ring-1 focus:ring-brand-yellow transition-all shadow-inner cursor-text">
+                    </div>
+                </div>
+
+                <div class="retro-divider"></div>
+
+                <div class="flex justify-between items-end mb-4 cursor-default">
+                    <span class="font-tasty text-gray-300 text-xl uppercase tracking-wide">Total a pagar</span>
+                    <span class="font-black text-brand-yellow text-3xl drop-shadow-md" id="carrinho-total-final">R$ 0,00</span>
+                </div>
+
+                <div class="bg-red-900/40 border border-red-500/50 rounded-xl p-3 mb-5 flex items-start gap-3 shadow-inner cursor-default">
+                    <div class="w-8 h-8 rounded-full bg-brand-red flex items-center justify-center shrink-0 shadow-md">
+                        <i class="fa-solid fa-person-walking text-white"></i>
+                    </div>
+                    <p class="text-xs text-red-200 font-semibold leading-relaxed mt-0.5">
+                        Pedido para <strong class="font-black text-white uppercase tracking-wider">RETIRADA NO LOCAL</strong>. Não fazemos entregas. Pagamento no balcão.
+                    </p>
+                </div>
+
+                <button onclick="enviarPedidoWhatsApp()" class="w-full bg-[#25D366] hover:bg-[#1da851] text-white h-14 rounded-xl font-black text-lg flex justify-center items-center gap-3 transition-colors btn-press shadow-[0_5px_20px_rgba(37,211,102,0.4)] cursor-pointer">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                    <span class="font-tasty uppercase tracking-widest text-xl pt-1">Enviar Pedido</span>
+                </button>
+                
+                <div class="text-center mt-4">
+                    <button onclick="limparCarrinho()" class="text-xs font-bold text-gray-500 hover:text-brand-red transition-colors uppercase tracking-widest cursor-pointer">
+                        <i class="fa-solid fa-trash-can mr-1"></i> Esvaziar carrinho
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT                                 -->
+    <!-- ========================================== -->
+    <script>
+        const APP = {
+            config: {
+                whatsapp: "5563992414759", 
+                nome: "Lanchonete Cantinho do Sabor",
+                endereco: "Rua Tamburi, Sucupira - TO"
+            },
+            adicionais: [
+                { nome: "Hambúrguer + Mussarela", preco: 7.00 },
+                { nome: "Hambúrguer + Bacon", preco: 7.00 },
+                { nome: "Hambúrguer Extra", preco: 5.00 },
+                { nome: "Filé de Frango", preco: 5.00 },
+                { nome: "Mussarela", preco: 3.00 },
+                { nome: "Presunto", preco: 3.00 },
+                { nome: "Calabresa", preco: 3.00 },
+                { nome: "Bacon", preco: 3.00 },
+                { nome: "Ovo", preco: 3.00 },
+                { nome: "Cheddar", preco: 3.00 },
+                { nome: "Cebola", preco: 3.00 },
+                { nome: "Abacaxi", preco: 3.00 },
+                { nome: "Salsicha", preco: 3.00 },
+                { nome: "Maionese Extra", preco: 3.00 }
+            ],
+            categorias: ["★ Combos", "🍔 Hambúrgueres", "🍟 Porções", "🍧 Cremes", "🥤 Milk Shakes"],
+            produtos: [
+                // COMBOS
+                { id: 1, cat: "★ Combos", nome: "Combo Moda da Casa", desc: "1 Moda da Casa + Batata + Refri Lata.", preco: 45.00, img: "https://images.unsplash.com/photo-1594212204555-5dc162460e58?w=500&q=80", adc: false },
+                { id: 2, cat: "★ Combos", nome: "Combo X-Tudo", desc: "1 X-Tudo + Batata + Refri Lata.", preco: 40.00, img: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=500&q=80", adc: false },
+                { id: 3, cat: "★ Combos", nome: "Combo X-Franbacon", desc: "1 X-Franbacon + Batata + Refri Lata.", preco: 38.00, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80", adc: false },
+                
+                // BURGERS
+                { id: 4, cat: "🍔 Hambúrgueres", nome: "Moda da Casa", desc: "Hambúrguer, 2 ovos, presunto, mussarela, bacon, cheddar, calabresa, 2 salsichas, tomate, alface, milho e batata palha.", preco: 30.00, img: "https://images.unsplash.com/photo-1586816001966-79b736744398?w=500&q=80", adc: true },
+                { id: 5, cat: "🍔 Hambúrgueres", nome: "X-Tudo", desc: "Hambúrguer, ovo, presunto, mussarela, bacon, tomate, calabresa, salsicha, alface, milho e batata palha.", preco: 25.00, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80", adc: true },
+                { id: 6, cat: "🍔 Hambúrgueres", nome: "X-Calabacon", desc: "Hambúrguer, presunto, mussarela, bacon, tomate, calabresa, salsicha, alface, milho e batata palha.", preco: 23.00, img: "https://images.unsplash.com/photo-1594212204555-5dc162460e58?w=500&q=80", adc: true },
+                { id: 7, cat: "🍔 Hambúrgueres", nome: "X-Franbacon", desc: "Filé de frango, ovo, presunto, mussarela, bacon, salsicha, tomate, alface, milho e batata palha.", preco: 23.00, img: "https://images.unsplash.com/photo-1608767221051-2b9d18f35a1f?w=500&q=80", adc: true },
+                { id: 8, cat: "🍔 Hambúrgueres", nome: "X-Bacon Egg", desc: "Hambúrguer, ovo, presunto, mussarela, bacon, salsicha, tomate, alface, milho e batata palha.", preco: 23.00, img: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=500&q=80", adc: true },
+                { id: 9, cat: "🍔 Hambúrgueres", nome: "X-Calabresa Especial", desc: "Hambúrguer, ovo, presunto, mussarela, calabresa, salsicha, tomate, alface, milho e batata palha.", preco: 22.00, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80", adc: true },
+                { id: 10, cat: "🍔 Hambúrgueres", nome: "X-Bacon", desc: "Hambúrguer, presunto, mussarela, bacon, salsicha, tomate, alface, milho e batata palha.", preco: 21.00, img: "https://images.unsplash.com/photo-1594212204555-5dc162460e58?w=500&q=80", adc: true },
+                { id: 11, cat: "🍔 Hambúrgueres", nome: "X-Calabresa", desc: "Hambúrguer, presunto, mussarela, calabresa, salsicha, tomate, alface, milho e batata palha.", preco: 20.00, img: "https://images.unsplash.com/photo-1586816001966-79b736744398?w=500&q=80", adc: true },
+                { id: 12, cat: "🍔 Hambúrgueres", nome: "X-Egg Salada", desc: "Hambúrguer, ovo, presunto, mussarela, tomate, alface, milho e batata palha.", preco: 19.00, img: "https://images.unsplash.com/photo-1608767221051-2b9d18f35a1f?w=500&q=80", adc: true },
+                { id: 13, cat: "🍔 Hambúrgueres", nome: "X-Salada", desc: "Hambúrguer, presunto, mussarela, tomate, alface, milho e batata palha.", preco: 17.00, img: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=500&q=80", adc: true },
+                { id: 14, cat: "🍔 Hambúrgueres", nome: "X-Americano", desc: "Ovo, presunto, mussarela, tomate, alface.", preco: 15.00, img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&q=80", adc: true },
+                { id: 15, cat: "🍔 Hambúrgueres", nome: "X-Burguer", desc: "Hambúrguer, presunto, mussarela, tomate, alface.", preco: 15.00, img: "https://images.unsplash.com/photo-1594212204555-5dc162460e58?w=500&q=80", adc: true },
+                { id: 16, cat: "🍔 Hambúrgueres", nome: "Misto Quente", desc: "Presunto, mussarela, tomate, alface, milho e batata palha.", preco: 13.00, img: "https://images.unsplash.com/photo-1586816001966-79b736744398?w=500&q=80", adc: true },
+                
+                // PORÇÕES
+                { id: 17, cat: "🍟 Porções", nome: "Batata Simples", desc: "500g de batata, ketchup e maionese.", preco: 25.00, img: "https://images.unsplash.com/photo-1576107232684-1279f390859f?w=500&q=80", adc: false },
+                { id: 18, cat: "🍟 Porções", nome: "Batata Completa", desc: "500g de batata c/ bacon ou calabresa, cheddar, ketchup e maionese.", preco: 35.00, img: "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=500&q=80", adc: false },
+                { id: 19, cat: "🍟 Porções", nome: "Calabresa Acebolada", desc: "Calabresa, cebola, tomate, alface e molho verde.", preco: 40.00, img: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=500&q=80", adc: false },
+                { id: 20, cat: "🍟 Porções", nome: "Frango Acebolado", desc: "Frango acebolado, tomate, alface e molho verde.", preco: 40.00, img: "https://images.unsplash.com/photo-1562967914-608f82629710?w=500&q=80", adc: false },
+                { id: 21, cat: "🍟 Porções", nome: "Frango Especial", desc: "Frango, batata frita, tomate, alface e molho verde.", preco: 50.00, img: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=500&q=80", adc: false },
+                
+                // CREMES
+                { id: 22, cat: "🍧 Cremes", nome: "Creme de Açaí", desc: "Açaí cremoso e geladinho.", preco: 20.00, img: "https://images.unsplash.com/photo-1590137876181-2a5a7e340308?w=500&q=80", adc: false },
+                { id: 23, cat: "🍧 Cremes", nome: "Creme de Morango", desc: "Creme refrescante de morango.", preco: 20.00, img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=500&q=80", adc: false },
+                { id: 24, cat: "🍧 Cremes", nome: "Creme de Maracujá", desc: "Creme refrescante de maracujá.", preco: 20.00, img: "https://images.unsplash.com/photo-1546890975-7596e98cdbf1?w=500&q=80", adc: false },
+                { id: 25, cat: "🍧 Cremes", nome: "Creme de Cupuaçu", desc: "Sabor autêntico.", preco: 20.00, img: "https://images.unsplash.com/photo-1590137876181-2a5a7e340308?w=500&q=80", adc: false },
+                
+                // SHAKES
+                { id: 26, cat: "🥤 Milk Shakes", nome: "Milk Shake (300ml)", desc: "Milk shake super cremoso.", preco: 13.00, img: "https://images.unsplash.com/photo-1572490122747-3968b25ce858?w=500&q=80", adc: false },
+                { id: 27, cat: "🥤 Milk Shakes", nome: "Milk Shake (500ml)", desc: "O tamanho perfeito para refrescar.", preco: 20.00, img: "https://images.unsplash.com/photo-1553177595-4de2bb0842b9?w=500&q=80", adc: false },
+                { id: 28, cat: "🥤 Milk Shakes", nome: "Shake Nutella (300ml)", desc: "Com muita Nutella original.", preco: 18.00, img: "https://images.unsplash.com/photo-1572490122747-3968b25ce858?w=500&q=80", adc: false },
+                { id: 29, cat: "🥤 Milk Shakes", nome: "Shake Nutella (500ml)", desc: "Forrado da verdadeira Nutella.", preco: 25.00, img: "https://images.unsplash.com/photo-1553177595-4de2bb0842b9?w=500&q=80", adc: false },
+                { id: 30, cat: "🥤 Milk Shakes", nome: "Cascão", desc: "Sorvete na casquinha crocante.", preco: 10.00, img: "https://images.unsplash.com/photo-1558500851-40c2136d8591?w=500&q=80", adc: false },
+                { id: 31, cat: "🥤 Milk Shakes", nome: "Cascão Trufado", desc: "Recheado com trufa de chocolate.", preco: 12.00, img: "https://images.unsplash.com/photo-1558500851-40c2136d8591?w=500&q=80", adc: false }
+            ],
+            
+            carrinho: [],
+            itemAtual: null,
+            qtdAtual: 1,
+            adicionaisAtuais: [],
+            
+            formatarValor: (v) => v.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}),
+            
+            iniciar: function() {
+                this.renderMenu();
+                this.renderCards('Todos');
+            },
+
+            renderMenu: function() {
+                const nav = document.getElementById('nav-categorias');
+                let html = `<li><button onclick="APP.filtrar('Todos', this)" class="cat-btn px-5 py-2 rounded-full bg-brand-yellow text-brand-dark font-black text-sm uppercase tracking-wider shadow-md border-2 border-brand-yellow whitespace-nowrap transition-all cursor-pointer">TUDO</button></li>`;
+                this.categorias.forEach(cat => {
+                    html += `<li><button onclick="APP.filtrar('${cat}', this)" class="cat-btn px-5 py-2 rounded-full bg-black/50 text-white font-bold text-sm uppercase tracking-wider border-2 border-white/20 whitespace-nowrap hover:border-brand-yellow hover:text-brand-yellow transition-all cursor-pointer">${cat}</button></li>`;
+                });
+                nav.innerHTML = html;
+            },
+
+            filtrar: function(cat, btn) {
+                document.querySelectorAll('.cat-btn').forEach(b => b.className = "cat-btn px-5 py-2 rounded-full bg-black/50 text-white font-bold text-sm uppercase tracking-wider border-2 border-white/20 whitespace-nowrap hover:border-brand-yellow hover:text-brand-yellow transition-all cursor-pointer");
+                btn.className = "cat-btn px-5 py-2 rounded-full bg-brand-yellow text-brand-dark font-black text-sm uppercase tracking-wider shadow-md border-2 border-brand-yellow whitespace-nowrap transition-all cursor-pointer";
+                this.renderCards(cat);
+
+                // FAZ ROLAR PARA O TOPO SEMPRE QUE TROCAR DE CATEGORIA
+                window.scrollTo({
+                    top: document.getElementById('produtos-container').offsetTop - 120, 
+                    behavior: 'smooth'
+                });
+            },
+
+            renderCards: function(filtro) {
+                const box = document.getElementById('produtos-container');
+                box.innerHTML = '';
+                
+                this.categorias.forEach(cat => {
+                    if (filtro === 'Todos' || filtro === cat) {
+                        const prods = this.produtos.filter(p => p.cat === cat);
+                        if (prods.length > 0) {
+                            box.innerHTML += `
+                                <div class="flex items-center gap-3 mt-10 mb-6 px-2 cursor-default">
+                                    <div class="h-[2px] flex-1 bg-gradient-to-r from-transparent to-brand-red"></div>
+                                    <h2 class="text-3xl font-tasty text-brand-yellow uppercase tracking-widest drop-shadow-md text-center">${cat}</h2>
+                                    <div class="h-[2px] flex-1 bg-gradient-to-l from-transparent to-brand-red"></div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="grid-${cat.replace(/[^a-zA-Z0-9]/g, '')}"></div>
+                            `;
+                            
+                            const grid = document.getElementById(`grid-${cat.replace(/[^a-zA-Z0-9]/g, '')}`);
+                            prods.forEach(p => {
+                                grid.innerHTML += `
+                                    <div class="bg-brand-card/90 backdrop-blur-sm rounded-2xl p-3 flex gap-4 border border-white/5 shadow-lg hover:shadow-brand-red/20 transition-all cursor-pointer btn-press card-tasty" onclick="APP.abrirProduto(${p.id})">
+                                        <div class="w-28 h-28 rounded-xl overflow-hidden shrink-0 border border-white/10 relative pointer-events-none">
+                                            <img src="${p.img}" class="w-full h-full object-cover">
+                                            <div class="absolute inset-0 bg-black/10"></div>
+                                        </div>
+                                        <div class="flex-1 flex flex-col justify-between py-1 pr-1 pointer-events-none">
+                                            <div>
+                                                <h3 class="font-tasty text-white text-lg uppercase tracking-wide leading-tight mb-1 drop-shadow-sm">${p.nome}</h3>
+                                                <p class="text-xs text-gray-400 font-semibold leading-tight line-clamp-2">${p.desc}</p>
+                                            </div>
+                                            <div class="flex justify-between items-center mt-3">
+                                                <span class="font-black text-brand-yellow text-lg">${this.formatarValor(p.preco)}</span>
+                                                <div class="w-8 h-8 rounded-full bg-brand-red text-white flex items-center justify-center shadow-md">
+                                                    <i class="fa-solid fa-plus text-sm"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                        }
+                    }
+                });
+            },
+
+            abrirProduto: function(id) {
+                this.itemAtual = this.produtos.find(p => p.id === id);
+                this.qtdAtual = 1;
+                this.adicionaisAtuais = [];
+                
+                document.getElementById('modal-produto-nome').textContent = this.itemAtual.nome;
+                document.getElementById('modal-produto-desc').textContent = this.itemAtual.desc;
+                document.getElementById('modal-produto-img').src = this.itemAtual.img;
+                document.getElementById('modal-produto-obs').value = '';
+                document.getElementById('modal-produto-qtd').textContent = this.qtdAtual;
+                
+                const areaAdc = document.getElementById('area-adicionais');
+                const listaAdc = document.getElementById('lista-adicionais');
+                
+                if (this.itemAtual.adc) {
+                    areaAdc.classList.remove('hidden');
+                    listaAdc.innerHTML = '';
+                    this.adicionais.forEach((a, i) => {
+                        listaAdc.innerHTML += `
+                            <label class="flex justify-between items-center p-3 rounded-xl border border-white/5 bg-black/40 mb-2 cursor-pointer hover:border-brand-yellow/50 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="relative flex items-center justify-center w-5 h-5 pointer-events-none">
+                                        <input type="checkbox" class="peer appearance-none w-5 h-5 border-2 border-gray-500 rounded bg-transparent checked:bg-brand-yellow checked:border-brand-yellow transition-colors pointer-events-auto cursor-pointer" onchange="APP.toggleAdc(${i}, this.checked)">
+                                        <i class="fa-solid fa-check text-brand-dark text-xs absolute opacity-0 peer-checked:opacity-100 font-black pointer-events-none"></i>
+                                    </div>
+                                    <span class="text-sm text-gray-200 font-bold">${a.nome}</span>
+                                </div>
+                                <span class="text-sm text-brand-yellow font-black">+ ${this.formatarValor(a.preco)}</span>
+                            </label>
+                        `;
+                    });
+                } else {
+                    areaAdc.classList.add('hidden');
+                }
+                
+                this.calcModal();
+                document.getElementById('modal-produto').classList.remove('hidden');
+                document.getElementById('modal-produto').classList.add('flex');
+                document.body.style.overflow = 'hidden';
+            },
+            
+            toggleAdc: function(i, checked) {
+                const adc = this.adicionais[i];
+                if (checked) this.adicionaisAtuais.push(adc);
+                else this.adicionaisAtuais = this.adicionaisAtuais.filter(a => a.nome !== adc.nome);
+                this.calcModal();
+            },
+            
+            mudaQtd: function(d) {
+                if (this.qtdAtual + d >= 1) {
+                    this.qtdAtual += d;
+                    document.getElementById('modal-produto-qtd').textContent = this.qtdAtual;
+                    this.calcModal();
+                }
+            },
+            
+            calcModal: function() {
+                let sub = this.itemAtual.preco;
+                this.adicionaisAtuais.forEach(a => sub += a.preco);
+                document.getElementById('modal-produto-preco').textContent = this.formatarValor(sub);
+                document.getElementById('modal-produto-total-btn').textContent = this.formatarValor(sub * this.qtdAtual);
+            },
+            
+            addCarrinho: function() {
+                const obs = document.getElementById('modal-produto-obs').value.trim();
+                let pUnit = this.itemAtual.preco;
+                this.adicionaisAtuais.forEach(a => pUnit += a.preco);
+                
+                this.carrinho.push({
+                    uid: Date.now(),
+                    nome: this.itemAtual.nome,
+                    preco: pUnit,
+                    qtd: this.qtdAtual,
+                    adc: [...this.adicionaisAtuais],
+                    obs: obs,
+                    img: this.itemAtual.img
+                });
+                
+                fecharModalProduto();
+                this.attCarrinho();
+            },
+            
+            attCarrinho: function() {
+                let tQtd = 0, tValor = 0;
+                this.carrinho.forEach(i => { tQtd += i.qtd; tValor += (i.preco * i.qtd); });
+                
+                document.getElementById('carrinho-qtd').textContent = tQtd;
+                document.getElementById('carrinho-total-flutuante').textContent = this.formatarValor(tValor);
+                document.getElementById('carrinho-total-final').textContent = this.formatarValor(tValor);
+                
+                const btn = document.getElementById('btn-carrinho');
+                if (tQtd > 0) btn.classList.remove('translate-y-40');
+                else { btn.classList.add('translate-y-40'); fecharCarrinho(); }
+                
+                const lista = document.getElementById('carrinho-itens');
+                lista.innerHTML = '';
+                this.carrinho.forEach(i => {
+                    let hAdc = '', hObs = '';
+                    if (i.adc.length > 0) {
+                        hAdc = '<ul class="text-[11px] text-gray-400 mt-1 border-l-2 border-brand-red pl-2 space-y-0.5 font-semibold">';
+                        i.adc.forEach(a => hAdc += `<li>+ ${a.nome}</li>`);
+                        hAdc += '</ul>';
+                    }
+                    if (i.obs) hObs = `<p class="text-[11px] text-brand-yellow mt-1.5 font-bold bg-black/50 p-1.5 rounded shadow-inner"><i class="fa-regular fa-comment-dots mr-1"></i> ${i.obs}</p>`;
+                    
+                    lista.innerHTML += `
+                        <div class="bg-brand-card p-4 rounded-2xl border border-white/5 mb-3 flex gap-4 relative shadow-lg cursor-default">
+                            <button onclick="APP.remCarrinho(${i.uid})" class="absolute top-3 right-3 text-gray-500 hover:text-brand-red btn-press cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                            <div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-white/10"><img src="${i.img}" class="w-full h-full object-cover"></div>
+                            <div class="flex-1 pr-6">
+                                <h4 class="font-tasty text-white text-lg uppercase tracking-wide leading-tight">${i.nome}</h4>
+                                ${hAdc} ${hObs}
+                                <div class="flex justify-between items-end mt-3">
+                                    <span class="font-black text-brand-yellow text-lg">${this.formatarValor(i.preco * i.qtd)}</span>
+                                    <div class="flex items-center bg-brand-dark rounded-lg border border-white/10 h-8 px-1">
+                                        <button onclick="APP.altQtdCarrinho(${i.uid}, -1)" class="w-7 h-full flex items-center justify-center text-brand-yellow cursor-pointer btn-press"><i class="fa-solid fa-minus text-[10px]"></i></button>
+                                        <span class="w-6 text-center font-bold text-sm text-white">${i.qtd}</span>
+                                        <button onclick="APP.altQtdCarrinho(${i.uid}, 1)" class="w-7 h-full flex items-center justify-center text-brand-yellow cursor-pointer btn-press"><i class="fa-solid fa-plus text-[10px]"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            },
+            
+            altQtdCarrinho: function(uid, d) {
+                const i = this.carrinho.find(x => x.uid === uid);
+                if (i) { if (i.qtd + d >= 1) { i.qtd += d; this.attCarrinho(); } else this.remCarrinho(uid); }
+            },
+            remCarrinho: function(uid) { this.carrinho = this.carrinho.filter(x => x.uid !== uid); this.attCarrinho(); },
+            limpar: function() { this.carrinho = []; this.attCarrinho(); },
+            
+            enviarZap: function() {
+                const nome = document.getElementById('cliente-nome').value.trim();
+                if (!nome) { alert("Fala pra gente seu nome, por favor!"); document.getElementById('cliente-nome').focus(); return; }
+                
+                let t = `🍔 *NOVO PEDIDO (RETIRADA)* 🍔\n*${this.config.nome}*\n\n`;
+                t += `👤 *Cliente:* ${nome}\n📍 *Retirar em:* ${this.config.endereco}\n\n*Resumo do Pedido:*\n`;
+                
+                let tot = 0;
+                this.carrinho.forEach(i => {
+                    let sub = i.preco * i.qtd; tot += sub;
+                    t += `▪️ ${i.qtd}x *${i.nome}* (${this.formatarValor(i.preco)})\n`;
+                    i.adc.forEach(a => t += `   _+ ${a.nome}_\n`);
+                    if (i.obs) t += `   _Obs: ${i.obs}_\n`;
+                    t += `   _Subtotal: ${this.formatarValor(sub)}_\n\n`;
+                });
+                
+                t += `====================\n*TOTAL: ${this.formatarValor(tot)}*\n====================\n\n`;
+                t += `⏰ O pedido será preparado para *RETIRADA* no balcão.\n💸 Aceitamos Pix/Cartão/Dinheiro.`;
+                
+                window.open(`https://wa.me/${this.config.whatsapp}?text=${encodeURIComponent(t)}`, '_blank');
+            }
+        };
+
+        // Ligação com HTML
+        function abrirCarrinho() { 
+            if(APP.carrinho.length===0)return; 
+            document.getElementById('modal-carrinho').classList.remove('hidden'); 
+            document.getElementById('modal-carrinho').classList.add('flex'); 
+            document.body.style.overflow='hidden'; 
+        }
+        function fecharCarrinho() { 
+            document.getElementById('modal-carrinho').classList.add('hidden'); 
+            document.getElementById('modal-carrinho').classList.remove('flex'); 
+            document.body.style.overflow='auto'; 
+        }
+        function fecharModalProduto() { APP.fecharModalProduto(); }
+        APP.fecharModalProduto = function() {
+            document.getElementById('modal-produto').classList.add('hidden');
+            document.getElementById('modal-produto').classList.remove('flex');
+            document.body.style.overflow='auto';
+        }
+        function alterarQtdModal(d) { APP.mudaQtd(d); }
+        function confirmarAdicaoCarrinho() { APP.addCarrinho(); }
+        function enviarPedidoWhatsApp() { APP.enviarZap(); }
+        function limparCarrinho() { APP.limpar(); }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            APP.iniciar();
+        });
+    </script>
+</body>
+</html>
